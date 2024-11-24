@@ -1,0 +1,35 @@
+<h1>Календарь на {{ month }} месяц {{ year }} года</h1>
+
+<form method="get">
+    <label for="month">Выберите месяц:</label>
+    <input type="number" id="month" name="month" min="1" max="12" value="{{ month }}">
+    <button type="submit">Показать</button>
+</form>
+
+<div>
+    <a href="{{ path('calendar', { view: 'weekends', month: month }) }}">Вид с выделением выходных</a> |
+    <a href="{{ path('calendar', { view: 'list', month: month }) }}">Вид списка</a>
+</div>
+
+<table border="1">
+    <tr>
+        <th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th>
+    </tr>
+    <tr>
+        {% for day in calendar %}
+        {% if day is null %}
+            <td></td>
+        {% else %}
+            <td>{{ day.day }}</td>
+        {% endif %}
+
+        {% if loop.index % 7 == 0 %}
+    </tr><tr>
+        {% endif %}
+        {% endfor %}
+
+        {% for i in 1..(7 - calendar|length % 7) %}
+            <td></td>
+        {% endfor %}
+    </tr>
+</table>
