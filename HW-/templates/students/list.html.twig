@@ -1,0 +1,72 @@
+<h1>Список студентов</h1>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Имя</th>
+        <th>Оценки</th>
+        <th>Добавить оценку</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for student in students %}
+        <tr>
+            <td>{{ student.id }}</td>
+            <td>{{ student.name }}</td>
+            <td>
+                {% for grade in student.grades %}
+                    {{ grade.value }}
+                    {% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </td>
+            <td>
+                <form
+                    method="POST"
+                    action="{{ path('add_grade', {id: student.id}) }}"
+                >
+                    <input
+                        type="number"
+                        name="grade"
+                        placeholder="Введите оценку"
+                        required
+                    >
+                    <button type="submit">
+                        Добавить
+                    </button>
+                </form>
+            </td>
+            <td>
+                <form
+                    method="POST"
+                    action="{{ path('delete_student', {id: student.id}) }}"
+                    onsubmit="return confirm('Вы уверены, что хотите удалить этого студента {{ student.name }}?');"
+                >
+                    <button
+                        type="submit"
+                        class="btn btn-danger"
+                    >
+                        Удалить
+                    </button>
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<h2>Добавить студента</h2>
+<form
+    method="POST"
+    action="{{ path('add_student') }}"
+>
+    <input
+        type="text"
+        name="name"
+        placeholder="Имя студента"
+        required
+    >
+    <button type="submit">
+        Добавить
+    </button>
+</form>
